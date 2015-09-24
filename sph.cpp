@@ -1,3 +1,4 @@
+// {{{
 #include <vector>
 #include <map>
 #include <iterator>
@@ -194,6 +195,7 @@ template <typename T> inline bool operator == (const vector<T>& lhs, const vecto
 template <typename T> inline bool operator != (const vector<T>& lhs, const vector<T>& rhs) {
     return !(lhs == rhs);
 }
+// }}}
 
 #include PARAM
 
@@ -410,4 +412,4 @@ int main() {
     for (int i = 0; i < 600; ++i) prts.next().save(frm++);
 }
 
-// vim:tw=109:cc=+2:
+// vim:tw=109:cc=+2:fdm=marker:
