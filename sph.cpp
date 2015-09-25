@@ -156,22 +156,6 @@ public:
     T x, y, z;
 };
 
-template <typename T>
-class cube {
-public:
-    cube(const vector<real>& l, const vector<real>& u) : lower_limit_(l), upper_limit_(u) {}
-
-    const vector<real>& lower_limit() const { return lower_limit_; }
-    const vector<real>& upper_limit() const { return upper_limit_; }
-
-    real width() const { return upper_limit_.x - lower_limit_.x; }
-    real height() const { return upper_limit_.y - lower_limit_.y; }
-    real depth() const { return upper_limit_.z - lower_limit_.z; }
-
-private:
-    vector<real> lower_limit_, upper_limit_;
-};
-
 template <typename T> inline std::ostream& operator << (std::ostream& os, const vector<T>& vec) {
     return os << "(" << vec.x << ", " << vec.y << ", " << vec.z << ")";
 }
@@ -195,6 +179,22 @@ template <typename T> inline bool operator == (const vector<T>& lhs, const vecto
 template <typename T> inline bool operator != (const vector<T>& lhs, const vector<T>& rhs) {
     return !(lhs == rhs);
 }
+
+template <typename T>
+class cube {
+public:
+    cube(const vector<real>& l, const vector<real>& u) : lower_limit_(l), upper_limit_(u) {}
+
+    const vector<real>& lower_limit() const { return lower_limit_; }
+    const vector<real>& upper_limit() const { return upper_limit_; }
+
+    real width() const { return upper_limit_.x - lower_limit_.x; }
+    real height() const { return upper_limit_.y - lower_limit_.y; }
+    real depth() const { return upper_limit_.z - lower_limit_.z; }
+
+private:
+    vector<real> lower_limit_, upper_limit_;
+};
 // }}}
 
 #include PARAM
