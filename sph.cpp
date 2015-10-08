@@ -1,6 +1,7 @@
 // {{{
 #include <vector>
 #include <map>
+#include <tuple>
 #include <iterator>
 #include <algorithm>
 #include <functional>
@@ -291,7 +292,7 @@ private:
         using neighbors = std::vector<particle*>;
 
         neighborhood(particles& prts) : prts_(prts) {
-            prts.each([&](particle& prt) { graph_[index_of(prt.pos)].push_back(&prt); });
+            prts.each([&](particle& prt) { graph_[key_of(prt.pos)].push_back(&prt); });
         }
 
         neighbors neighbors_of(particle& prt) {
@@ -301,7 +302,7 @@ private:
                 for (int y = -1; y < 2; ++y) {
                     for (int z = -1; z < 2; ++z) {
                         const vector<real> pos(prt.pos.x + x*d, prt.pos.y + y*d, prt.pos.z + z*d);
-                        entry_type& ent = graph_[index_of(pos)];
+                        entry_type& ent = graph_[key_of(pos)];
                         std::copy(ent.begin(), ent.end(), std::back_inserter(nbs));
                     }
                 }
@@ -310,19 +311,18 @@ private:
         }
     
     private:
-        int index_of(const vector<real>& pos) const {
+        using key_type   = std::tuple<int, int, int>;
+        using entry_type = std::vector<particle*>;
+        using graph_type = std::map<key_type, entry_type>;
+
+        key_type key_of(const vector<real>& pos) const {
             const real d = H / SCALE;
-            const int x  = (pos.x - prts_.bounds().lower_limit().x) / d;
-            const int y  = (pos.y - prts_.bounds().lower_limit().y) / d;
-            const int z  = (pos.z - prts_.bounds().lower_limit().z) / d;
-            const int mx = prts_.bounds().width()  / d;
-            const int my = prts_.bounds().height() / d;
-            return x + y * mx + z * mx * my;
+            return std::make_tuple(static_cast<int>((pos.x - prts_.bounds().lower_limit().x) / d),
+                                   static_cast<int>((pos.y - prts_.bounds().lower_limit().y) / d),
+                                   static_cast<int>((pos.z - prts_.bounds().lower_limit().z) / d));
         }
 
         particles& prts_;
-        using entry_type = std::vector<particle*>;
-        using graph_type = std::map<int, entry_type>;
         graph_type graph_;
     };
 
